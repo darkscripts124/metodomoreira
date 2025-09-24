@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrix Rainbow - Método Moreira</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Silkscreen&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Silkscreen', monospace; /* Use Silkscreen for everything */
+        }
+        
+        body {
+            background: #000;
+            overflow: hidden;
+            height: 100vh;
+            position: relative;
+        }
+        
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .matrix-container {
+            position: relative;
+            z-index: 2;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 2rem;
+            background: linear-gradient(45deg, #cc0066, #00cc66, #0066cc, #cc6600, #6600cc);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: rainbow-flow 3s ease-in-out infinite, glow-pulse 2s ease-in-out infinite alternate;
+            text-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+        }
+        
+        .subtitle {
+            font-size: 1.5rem;
+            color: #00cc41;
+            margin-bottom: 3rem;
+            text-shadow: 0 0 8px #00cc41;
+            animation: flicker 4s ease-in-out infinite;
+        }
+        
+        .activate-btn {
+            background: linear-gradient(45deg, #cc0066, #00cc66, #0066cc, #cc6600, #6600cc);
+            background-size: 400% 400%;
+            border: none;
+            padding: 15px 15px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            animation: rainbow-bg 4s linear infinite, btn-pulse 3s ease-in-out infinite;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2), inset 0 0 15px rgba(255, 255, 255, 0.1);
+        }
+        
+        .activate-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(255, 255, 255, 0.4), inset 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+        
+        .activate-btn:active {
+            transform: scale(0.98);
+        }
+        
+        .activate-btn::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #cc0066, #00cc66, #0066cc, #cc6600, #6600cc);
+            background-size: 400% 400%;
+            border-radius: 12px;
+            z-index: -1;
+            animation: rainbow-bg 4s linear infinite;
+            filter: blur(8px);
+        }
+        
+        @keyframes rainbow-flow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        @keyframes rainbow-bg {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes glow-pulse {
+            0% { filter: brightness(1) drop-shadow(0 0 20px rgba(255, 255, 255, 0.3)); }
+            100% { filter: brightness(1.2) drop-shadow(0 0 40px rgba(255, 255, 255, 0.6)); }
+        }
+        
+        @keyframes btn-pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.2), inset 0 0 15px rgba(255, 255, 255, 0.1); }
+            50% { box-shadow: 0 0 40px rgba(255, 255, 255, 0.4), inset 0 0 20px rgba(255, 255, 255, 0.2); }
+        }
+        
+        @keyframes flicker {
+            0%, 100% { opacity: 1; text-shadow: 0 0 8px #00cc41; }
+            25% { opacity: 0.8; text-shadow: 0 0 12px #00cc41; }
+            50% { opacity: 1; text-shadow: 0 0 15px #00cc41; }
+            75% { opacity: 0.9; text-shadow: 0 0 10px #00cc41; }
+        }
+        
+        /* Infinite scroll */
+        .matrix-rain {
+            position: absolute;
+            top: 0;
+            color: #00cc41;
+            font-size: 18px;
+            line-height: 18px;
+            white-space: pre;
+            opacity: 0.7;
+            animation: matrix-scroll linear infinite;
+        }
+
+        @keyframes matrix-scroll {
+            from { transform: translateY(-100%); }
+            to   { transform: translateY(100vh); }
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            .activate-btn {
+                font-size: 1.2rem;
+                padding: 12px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="matrix-bg"></div>
+    
+    <div class="matrix-container">
+        <h1>MOREIRA</h1>
+        <p class="subtitle">Sistema Inicializado - Esperando Comando</p>
+        <button class="activate-btn" onclick="activateMethod()">
+            ACTIVATE MÉTODO MOREIRA
+        </button>
+    </div>
+
+    <script>
+        function createMatrixRain() {
+            const chars = "01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン";
+            const container = document.querySelector('.matrix-bg');
+            
+            for (let i = 0; i < 50; i++) {
+                const column = document.createElement('div');
+                column.className = 'matrix-rain';
+
+                column.style.left = Math.random() * 100 + 'vw';
+                column.style.animationDuration = (Math.random() * 6 + 6) + 's';
+
+                let text = '';
+                for (let j = 0; j < 100; j++) {
+                    text += chars[Math.floor(Math.random() * chars.length)] + '\n';
+                }
+                column.textContent = text;
+
+                const rainbowColors = ['#cc0066', '#00cc66', '#0066cc', '#cc6600', '#6600cc', '#ffff00'];
+                const randomColor = rainbowColors[Math.floor(Math.random() * rainbowColors.length)];
+                column.style.color = randomColor;
+                column.style.textShadow = `0 0 10px ${randomColor}`;
+
+                container.appendChild(column);
+            }
+        }
+        
+        function activateMethod() {
+            const btn = document.querySelector('.activate-btn');
+            btn.style.animation = 'rainbow-bg 0.2s linear infinite';
+            
+            setTimeout(() => {
+                window.open('https://www.roblox.com/share?code=b46640219d11534d84c7bca01445f281&type=Server', '_blank');
+            }, 500);
+        }
+        
+        createMatrixRain();
+        
+        function createParticles() {
+            const container = document.body;
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.style.position = 'absolute';
+                particle.style.width = '2px';
+                particle.style.height = '2px';
+                particle.style.background = '#fff';
+                particle.style.borderRadius = '50%';
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.top = Math.random() * 100 + 'vh';
+                particle.style.animation = `float ${Math.random() * 6 + 4}s ease-in-out infinite`;
+                particle.style.opacity = Math.random() * 0.8 + 0.2;
+                container.appendChild(particle);
+            }
+        }
+        
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes float {
+                0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.2; }
+                50% { transform: translateY(-20px) rotate(180deg); opacity: 0.8; }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        createParticles();
+    </script>
+</body>
+</html>
